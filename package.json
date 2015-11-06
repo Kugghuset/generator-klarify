@@ -1,0 +1,16 @@
+{
+  "name": "generator-klarify",
+  "version": "0.1.0",
+  "description": "",
+  "files": [
+    "generators/app",
+    "generator/router"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "gulp-beautify": "^2.0.0",
+    "yeoman-generator": "^0.21.1"
+  }
+}
