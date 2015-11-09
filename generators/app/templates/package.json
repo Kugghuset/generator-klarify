@@ -1,0 +1,28 @@
+{
+  "name": "<%= name %>",
+  "version": "<%= version %>",
+  "description": "<%= description %>",
+  "main": "server/app.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+    "test": "mocha ./test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "<%= git.url %>",
+    "test": "npm test"
+  },
+  "keywords": [
+    "fortnox",
+    "kugghuset"
+  ],
+  "author": "<%= author %>",
+  "license": "ISC",
+  "bugs": {
+    "url": "<%= git.url %>/issues"
+  },
+  "homepage": "<%= git.url %>"
+}
