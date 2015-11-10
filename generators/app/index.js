@@ -3,6 +3,7 @@
 var Promise = require('bluebird');
 var _ = require('lodash');
 var ngu = require('normalize-git-url');
+var utils = require('./utils');
 
 /**
  * 
@@ -79,15 +80,7 @@ var promptGit = function (yo) {
       name: 'git',
       message: 'Where\'s the Git repo?'
     }, function (answers) {
-      if (answers.git) {
-        answers.git = ngu(answers.git);
-        if (answers.git.url) {
-          answers.git.url = answers.git.url
-            .replace(/\.git$/, '') // Remove trailing '.git'
-            .replace(/[a-z]+@/gi, 'https://') // Replace possible git@ with https://
-            .replace(/(\.[a-z]+):/, '$1/'); // Replace ':' in the middle with '/', sort of
-        }
-      }
+      if (answers.git) { answers.git = utils.normalizeGit(answers.git); }
       
       yo.answers = _.extend({}, yo.answers, answers);
       resolve(yo);
@@ -101,8 +94,8 @@ module.exports = generators.Base.extend({
     generators.Base.apply(this, arguments);
     
     this.answers = _.extend({}, this.answers, {
-      name: (arguments[0] ? 'klarify-ds-' + arguments[0][0] : undefined),
-      version: '0.0.1',
+      name: (arguments[0] ? 'klarify-ds-' + arguments[0][0] : this.appname),
+      version: '0.0.0',
       description: ''
     });
     
