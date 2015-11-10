@@ -75,12 +75,13 @@ var copyTemplateFiles = function copyTemplateFiles(yo, options, _subFolder) {
 module.exports = generators.NamedBase.extend({
   constructor: function () {
     generators.NamedBase.apply(this, arguments);
+    this.answers = this.config.getAll();
   },
   initialize: function () {
     // this.log(this.name);
   },
   writing: function () {
     var nameCapitalized = this.name[0].toUpperCase() + this.name.slice(1);
-    copyTemplateFiles(this, { name: this.name, nameCapitalized: nameCapitalized });
+    copyTemplateFiles(this, _.extend({}, this.answers, { name: this.name, nameCapitalized: nameCapitalized }));
   }
 });

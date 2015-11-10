@@ -27,3 +27,26 @@ exports.normalizeGit = function (rawUrl) {
   
   return _.extend({}, git, { rawUrl: rawUrl });
 };
+
+/**
+ * Coverts spaces and other non-letters or numbers to PascalCase.
+ * 
+ * @param {String} input
+ * @return {String}
+ */
+exports.pascalCase = function (input) {
+  return _.map(input.split(/[^a-öA-Ö]/), function (subStr) {
+    return subStr[0].toUpperCase() + subStr.slice(1);
+  }).join('');
+}
+
+/**
+ * Coverts spaces and other non-letters or numbers to CamelCase.
+ * 
+ * @param {String} input
+ * @return {String}
+ */
+exports.camelCase = function (input) {
+  var pascal = exports.pascalCase(input);
+  return pascal[0].toLowerCase() + pascal.slice(1);
+}

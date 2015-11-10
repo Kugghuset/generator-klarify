@@ -16,8 +16,9 @@
     "test": "npm test"
   },
   "keywords": [
-    "fortnox",
-    "kugghuset"
+    "<%= dataSource %>",
+    "kugghuset",
+    "klarify-sprocket"
   ],
   "author": "<%= author %>",
   "license": "ISC",

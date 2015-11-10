@@ -2,7 +2,7 @@
 
 /**
  * The request handler file for the <%= name %> route.
- * This is where requests to the Fortnox API are made.
+ * This is where requests to the <%= dataSource %> API are made.
  */
 
 var _ = require('lodash');
@@ -11,10 +11,9 @@ var request = require('request');
 
 var config = require('../../config/environment/development');
 var appState = require('../../app.state');
-var util = require('../../utils/fortnox.util');
 var logger = require('../../utils/logger.util');
 
-var fortnox<%= nameCapitalized %>Url = 'https://api.fortnox.se/3/<%= name %>/';
+var baseUrl = 'https://insert.url';
 
 /**
  * Returns a promise of the body of the response.
@@ -59,7 +58,7 @@ function getPage(url) {
 }
 
 /**
- * Recursively gets all <%= nameCapitalized %>s from Fortnox.
+ * Recursively gets all <%= nameCapitalized %>s from <%= dataSource %>.
  * 
  * @param {Array} <%= name %> - set internally, do not pass in!
  * @param {Number} currentPage - set internally, do not pass in!
@@ -92,7 +91,7 @@ exports.getAll = function getAll(<%= name %>, currentPage, lastPage) {
   }
   
   currentPage++;
-  return getPage(util.pageUrlFor(fortnox<%= nameCapitalized %>Url, currentPage))
+  return getPage(util.pageUrlFor(baseUrl, currentPage))
   .then(function (res) {
     if ('ErrorInformation' in res) {
       // Reject the because of the error to ensure no infinity loop.
@@ -165,7 +164,7 @@ exports.getNewlyModified = function getNewlyModified(<%= name %>, currentPage, l
     lastUpdated = dateUpdated;
     currentPage++;
       
-    return getPage(util.pageUrlFor(fortnox<%= nameCapitalized %>Url, currentPage, lastUpdated))
+    return getPage(util.pageUrlFor(baseUrl, currentPage, lastUpdated))
   })
   .then(function (res) {
     if ('ErrorInformation' in res) {

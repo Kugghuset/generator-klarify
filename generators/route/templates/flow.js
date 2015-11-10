@@ -14,7 +14,7 @@ var requestHandler = require('./<%= name %>.requestHandler');
 
 /**
  * Fetches and inserts or updates all <%= nameCapitalized %>s
- * from the Fortnox API which are new or updated since last time.
+ * from the <%= dataSource %> API which are new or updated since last time.
  * 
  * @return {Promise} -> undefined
  */
@@ -26,7 +26,7 @@ exports.fetchNewlyModified = function () {
 
 /**
  * Clears the old instance of <%= nameCapitalized %>s
- * and downloads all from the Fortnox API.
+ * and downloads all from the <%= dataSource %> API.
  * 
  * WARNING: This drops the old <%= nameCapitalized %> table
  * and initializes a completely fresh.

@@ -41,6 +41,32 @@ var promptAppName = function (yo) {
 };
 
 /**
+ * Prompts the user for the name of the DataSource
+ * 
+ * @param {Object} yo - yo instance, from generators.(Named)Base.extend used as *this*
+ * @return {Promise} -> *yo* - to be chainable
+ */
+var promptDataSource = function (yo) {
+  return new Promise(function (resolve, reject) {
+    yo.prompt({
+      type: 'input',
+      name: 'dataSource',
+      message: 'What\'s the data source name?',
+      description: 'If the name needs spaces, as a suggestion use PascalCase for the naming. Any spaces will be removed and converted into PascalCase and the first letter will be capitalized.',
+      default: 'DataSource',
+      store: true
+    }, function (answers) {
+      
+      answers.dataSource = utils.pascalCase(answers.dataSource);
+      answers.dataSourceCamel = utils.camelCase(answers.dataSource);
+      
+      yo.answers = _.extend({}, yo.answers, answers);
+      resolve(yo);
+    })
+  });
+}
+
+/**
  * Prompts the user for the author name.
  * 
  * @param {Object} yo - yo instance, from generators.(Named)Base.extend used as *this*
@@ -83,10 +109,16 @@ var promptGit = function (yo) {
   });
 }
 
+/**
+ * Generator starts here.
+ */
 module.exports = generators.Base.extend({
   // note: arguments and options should be defined in the constructor
   constructor: function () {
     generators.Base.apply(this, arguments);
+    
+    // Creates config file.
+    this.config.save();
     
     // Create base for answers so they guaranteed exists.
     this.answers = _.extend({}, this.answers, {
@@ -106,9 +138,11 @@ module.exports = generators.Base.extend({
     var done = this.async();
     
     promptAppName(this, done)
+    .then(promptDataSource)
     .then(promptAuthor)
     .then(promptGit)
     .then(function (yo) {
+      yo.config.set(yo.answers);
       done();
     })
     .catch(this.log);
