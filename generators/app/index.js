@@ -2,7 +2,6 @@
 
 var Promise = require('bluebird');
 var _ = require('lodash');
-var ngu = require('normalize-git-url');
 var utils = require('./utils');
 
 /**
@@ -13,10 +12,6 @@ var utils = require('./utils');
  * 
  * 
  */
-
-
-
-
 
 /**
  * Priority order: http://yeoman.io/authoring/running-context.html
@@ -93,27 +88,19 @@ module.exports = generators.Base.extend({
   constructor: function () {
     generators.Base.apply(this, arguments);
     
+    // Create base for answers so they guaranteed exists.
     this.answers = _.extend({}, this.answers, {
       name: (arguments[0] ? 'klarify-ds-' + arguments[0][0] : this.appname),
       version: '0.0.0',
       description: ''
     });
-    
-    // This method adds support for a '--coffee' flag
-    // this.option('coffee');
-    // And you can then access it later in this way; e.g.
-    // this.scriptSuffix = (this.options.coffee ? '.coffee' : '.js');
-    // this.log('We did it with coffeescript? ' + this.scriptSuffix)
+
   },
   initializing: function () {
-    console.log('Initializing');
+    this.log('Initializing');
   },
   paths: function () {
-    // console.log(this.git);
-    // console.log(this.destinationRoot());
-    // console.log(this.sourceRoot());
-    // console.log(this.destinationPath('index.js'));
-    // console.log(this.templatePath('index.js'));
+    
   },
   prompting: function () {
     var done = this.async();
@@ -124,10 +111,10 @@ module.exports = generators.Base.extend({
     .then(function (yo) {
       done();
     })
-    .catch(console.log);
+    .catch(this.log);
   },
   writing: function () {
-    console.log(this.answers);
+    this.log()
     this.fs.copyTpl(
       this.templatePath(),
       this.destinationPath(),
@@ -135,10 +122,12 @@ module.exports = generators.Base.extend({
     )
   },
   installingDependencies: function () {
+    this.log('Installing dependencies, please wait.')
+    
     this.npmInstall(['bluebird', 'express', 'lodash', 'morgan', 'request', 'seriate', 'winston'], { 'save': true });
     this.npmInstall(['doctoc', 'gulp', 'gulp-exec', 'mocha', 'unit.js'], { 'saveDev': true });
   },
   end: function () {
-    console.log('Good bye.');
+    this.log('Good bye.');
   }
 });
