@@ -23,11 +23,22 @@ gulp.task('server', function () {
   });
 });
 
-// Updates the table of contents for the README.
+/**
+ * Updates the table of contents for the README.
+ */
 gulp.task('doc', function () {
   // NOTE: doctoc needs to be installed, see README.md
   gulp.src('./README.md')
     .pipe(gexec('doctoc .'));
+});
+
+/**
+ * Runs the git assume unchanged command.
+ */
+gulp.task('assume-unchanged', function () {
+  // NOTE: git needs to be installed.
+  gulp.src('./userConfig.js')
+    .pipe(gexec('git update-index --assume-unchanged userConfig.js'));
 });
 
 // Watchers
