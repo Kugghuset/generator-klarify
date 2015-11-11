@@ -17,17 +17,6 @@ var baseUrl = 'https://insert.url';
 
 /**
  * Returns a promise of the body of the response.
- * Example response
- * {
- *  MetaInformation: {
- *    {
- *      '@TotalResources': (Number),
- *      '@TotalPages': (Number),
- *      '@CurrentPage': (Number)
- *    }
- *  },
- *  <%= nameCapitalized %>s: [(<%= nameCapitalized %>s)]
- * }
  * 
  * @param {String} url
  * @return {Promise} -> {Object}
@@ -72,7 +61,8 @@ exports.getAll = function getAll(<%= name %>, currentPage, lastPage) {
     <%= name %> = [];
     currentPage = 0;
   }
-
+  
+  // NOTE: Change this to fit for <%= dataSource %>'s API
   if (currentPage >= lastPage) {
     // Finished getting all <%= nameCapitalized %>s
     return new Promise(function (resolve, reject) {
@@ -91,16 +81,20 @@ exports.getAll = function getAll(<%= name %>, currentPage, lastPage) {
   }
   
   currentPage++;
-  return getPage(util.pageUrlFor(baseUrl, currentPage))
+  // NOTE: Change this to account for pagination
+  return getPage(baseUrl)
   .then(function (res) {
+    // NOTE: Change this to account for error responses in <%= dataSource %>
     if ('ErrorInformation' in res) {
       // Reject the because of the error to ensure no infinity loop.
       return new Promise(function (resolve, reject) {
-        reject(new Error(res.ErrorInformation.message));
+        // NOTE: Change thsi to display actual error message.
+        reject(new Error('Something went wrong with the request'));
       });
     }
-    if (typeof lastPage === 'undefined' && typeof res === 'object' && res.MetaInformation) {
-      lastPage = res.MetaInformation['@TotalPages'];
+    // NOTE: Change this to account for pagination
+    if (typeof lastPage === 'undefined') {
+      lastPage = currentPage; // NOTE: Change this
     }
     
     return getAll(<%= name %>.concat(res.<%= nameCapitalized %>s), currentPage, lastPage)
@@ -164,22 +158,21 @@ exports.getNewlyModified = function getNewlyModified(<%= name %>, currentPage, l
     lastUpdated = dateUpdated;
     currentPage++;
       
-    return getPage(util.pageUrlFor(baseUrl, currentPage, lastUpdated))
+    return getPage(baseUrl);
   })
   .then(function (res) {
     if ('ErrorInformation' in res) {
       // Reject the because of the error to ensure no infinity loop.
       return new Promise(function (resolve, reject) {
-        reject(new Error(res.ErrorInformation.message));
+        // NOTE: Change thsi to display actual error message.
+        reject(new Error('Something went wrong with the request'));
       });
     }
-    
-    // Set lastPage if it's undefined
-    if (typeof lastPage === 'undefined' && typeof res === 'object' && res.MetaInformation) {
-      lastPage = res.MetaInformation['@TotalPages'];
+    // NOTE: Change this to account for pagination
+    if (typeof lastPage === 'undefined') {
+      lastPage = currentPage; // NOTE: Change this
     }
     
-    console.log(lastUpdated);
     // Recursion!
     return getNewlyModified(<%= name %>.concat(res.<%= nameCapitalized %>s), currentPage, lastPage, lastUpdated);
   });

@@ -1,7 +1,12 @@
+'use strict'
+
 var generators = require('yeoman-generator');
 var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
+var chalk = require('chalk');
+
+var utils = require('../utils');
 
 /**
  * Combines and returns an url like string
@@ -83,5 +88,12 @@ module.exports = generators.NamedBase.extend({
   writing: function () {
     var nameCapitalized = this.name[0].toUpperCase() + this.name.slice(1);
     copyTemplateFiles(this, _.extend({}, this.answers, { name: this.name, nameCapitalized: nameCapitalized }));
+    
+    // Update routes.js to include the new route
+    utils.injectText(
+      this,
+      'app.use(\'/' + this.name + '\', require(\'./' + this.name + '\'));',
+      this.destinationPath('server/api/routes.js')
+      );
   }
 });

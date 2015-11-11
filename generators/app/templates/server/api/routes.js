@@ -15,4 +15,9 @@
  */
 module.exports = function (app) {
   // Insert routes and any middleware here
+  
+  // Do not remove or alter the Start/Stop injection rows.
+  // Automatically inected routes.
+  /// Start injection ///
+  /// Stop injection ///
 };
