@@ -1,17 +1,12 @@
 'use strict'
 
+var generators = require('yeoman-generator');
 var Promise = require('bluebird');
 var _ = require('lodash');
 var utils = require('../utils');
 var chalk = require('chalk');
 var shell = require('shelljs');
 var fs = require('fs');
-
-/**
- * Priority order: http://yeoman.io/authoring/running-context.html
- */
-
-var generators = require('yeoman-generator');
 
 /**
  * Prompts the user for the appName.
@@ -136,7 +131,8 @@ module.exports = generators.Base.extend({
   constructor: function () {
     generators.Base.apply(this, arguments);
     
-    this.option('typings')
+    this.option('typings');
+    this.option('tsd'); // alias for typings
     
     // Create base for answers so they are guaranteed exist.
     this.answers = _.extend({}, this.answers, {
@@ -192,7 +188,7 @@ module.exports = generators.Base.extend({
     this.npmInstall(dependencies, { 'save': true });
     this.npmInstall(devDependencies, { 'saveDev': true });
     
-    if (this.options.typings) {
+    if (this.options.typings || this.options.tsd) {
       if (shell.which('tsd')) {
         this.log('\nInstalling typings');
         this.spawnCommand('tsd', ['install'].concat(dependencies).concat(devDependencies), { 'save': true })
