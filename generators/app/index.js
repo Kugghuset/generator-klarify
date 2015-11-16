@@ -68,7 +68,8 @@ var promptAuthor = function (yo) {
       type: 'input',
       name: 'author',
       message: 'Who\'s the author?',
-      default: 'Arthur Dent'
+      default: 'Arthur Dent',
+      store: true
     }, function (answers) {
       yo.answers = _.extend({}, yo.answers, answers);
       resolve(yo);
@@ -91,7 +92,7 @@ var promptGitUrl = function (yo) {
       message: 'Where\'s the Git repo located?'
     }, function (answers) {
       if (answers.git) { answers.git = utils.normalizeGit(answers.git); }
-
+      
       yo.answers = _.extend({}, yo.answers, answers);
       resolve(yo);
     });
@@ -217,10 +218,17 @@ module.exports = generators.Base.extend({
       this.log(
         '\nRunning ' +
         chalk.inverse('git init') +
-        '\n'
+        '\n' + (this.answers.git && this.answers.git.rawUrl)
+          ? 'and ' + chalk.inverse('git remote add origin ' + this.answers.git.rawUrl)
+          : ''
         );
 
       shell.exec('git init');
+      
+      // Add remote if any
+      if (this.answers.git && this.answers.git.rawUrl) {
+        shell.exec('git remote add origin ' + this.answers.git.rawUrl);
+      }
 
       var gitIgnore = fs.readFileSync('.gitignore', 'utf8');
       fs.writeFileSync('.gitignore', gitIgnore.replace(/userConfig.js/, ''));
