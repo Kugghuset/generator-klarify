@@ -96,7 +96,7 @@ module.exports = generators.Base.extend({
       default: this.name || undefined
     }, function (answers) {
       // Set route name
-      this.name = answers.name;
+      this.name = utils.camelCase(answers.name);
       
       done();
     }.bind(this));
