@@ -77,15 +77,40 @@ var copyTemplateFiles = function copyTemplateFiles(yo, options, _subFolder) {
     }.bind(yo));
 }
 
-module.exports = generators.NamedBase.extend({
+module.exports = generators.Base.extend({
   constructor: function () {
-    generators.NamedBase.apply(this, arguments);
+    generators.Base.apply(this, arguments);
     this.answers = this.config.getAll();
+    
+    this.name = (arguments[0] ? arguments[0][0] : undefined);
   },
   initialize: function () {
     // this.log(this.name);
   },
+  prompting: function () {
+    var done = this.async();
+    this.prompt({
+      type: 'input',
+      name: 'name',
+      message: 'What\'s the name of the route',
+      default: this.name || undefined
+    }, function (answers) {
+      // Set route name
+      this.name = answers.name;
+      
+      done();
+    }.bind(this));
+  },
   writing: function () {
+    
+    if (!this.name) {
+      return this.log(
+        '\n' + chalk.yellow('No name given.') + '\n\n' +
+        chalk.red('You must enter a name for the route to be created!') +
+        '\n'
+      );
+    }
+    
     var nameCapitalized = this.name[0].toUpperCase() + this.name.slice(1);
     copyTemplateFiles(this, _.extend({}, this.answers, { name: this.name, nameCapitalized: nameCapitalized }));
     
@@ -95,5 +120,8 @@ module.exports = generators.NamedBase.extend({
       'app.use(\'/' + this.name + '\', require(\'./' + this.name + '\'));',
       this.destinationPath('server/api/routes.js')
       );
+  },
+  end: function () {
+    this.log('Exiting...');
   }
 });
