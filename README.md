@@ -68,35 +68,35 @@ The base scaffolds out a fully functional server where only the databse settings
 
 #### Questions
 
-The project name, should be prefixed with `klarify-ds-`.
+The **project name**, should be prefixed with `klarify-ds-`.
 
 ```bash
 [?] What's the project name? (klarify-ds-[name]|__foldername)
 # name as String, [name] is set by parameter if given
 ```
 
-The name of the data source to fetch from. Will be forced to PascalCase, I.E. `Data source` will become `DataSource`.
+The **name of the data source** to fetch from. Will be forced to PascalCase, I.E. `Data source` will become `DataSource`.
 
 ```bash
 [?] What's the data source name? (<stored_value>)
 # Data source as String -> PascalCase
 ```
 
-The name or alias of the author. Actual name is preferred.
+The **name or alias of the author**. Actual name is preferred.
 
 ```bash
 [?] Who's the author? (Arthur Dent|<stored_value>)
 # Name as String
 ```
 
-The git repo for the project. Can either be the SSH version the HTTPS version.
+The **git repo** for the project. Can either be the SSH version the HTTPS version.
 
 ```bash
 [?] Where's the Git repo located?
 # Git repo as String - optional
 ```
 
-Will set up the git repo locally, make the initial commit, mark `userConfig.js` with `--assume-unchanged`
+**Set the repo up locally?** Will set up the git repo locally, make the initial commit, mark `userConfig.js` with `--assume-unchanged`
 
 ```bash
 [?] Do you want to automatically set git up? (Y/n)
@@ -133,7 +133,7 @@ Generates a route containing the desired structure.
 
 #### Questions
 
-The name of the route, will be set to camelCase if it contains spaces.
+The **name of the route**, will be set to camelCase if it contains spaces.
 
 ```bash
 [?] What's the name of the route ([name])
